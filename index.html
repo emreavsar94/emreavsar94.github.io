@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emre Avşar - Kontrol Sistemleri ve Algoritma Portfolyosu</title>
+<style>
+    :root {
+        --brand-dark: #0f172a;
+        --brand-blue: #1e3a8a;
+        --brand-accent: #2563eb;
+        --brand-light: #f8fafc;
+        --bg-card: #ffffff;
+        --text-main: #475569;
+        --text-dark: #0f172a;
+        --border-color: #e2e8f0;
+    }
+    
+    body {
+        font-family: '-apple-system', BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        color: var(--text-main);
+        background-color: var(--brand-light);
+        /* Teknik blueprint dokusu için kareli arka plan */
+        background-image: linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+        background-size: 30px 30px;
+        background-position: center top;
+        margin: 0;
+        padding: 0;
+    }
+    
+    /* Üst Menü */
+    .navbar {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        padding: 18px 0;
+    }
+    
+    .nav-container {
+        max-width: 1140px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 24px;
+    }
+    
+    .logo {
+        font-weight: 800;
+        font-size: 10.5pt;
+        color: var(--text-dark);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .nav-status {
+        font-size: 8.5pt;
+        font-weight: 600;
+        color: var(--brand-accent);
+        background: #eff6ff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: 1px solid #dbeafe;
+    }
+    
+    /* Hero Giriş Alanı */
+    .hero {
+        background: radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.05) 0%, rgba(255, 255, 255, 0) 50%), #ffffff;
+        padding: 100px 24px 70px 24px;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .hero-content {
+        max-width: 850px;
+        margin: 0 auto;
+    }
+    
+    h1 { font-size: 36pt; color: var(--text-dark); margin: 0 0 8px 0; letter-spacing: -1px; font-weight: 800; }
+    .subtitle { font-size: 13pt; color: var(--brand-blue); font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 2px; }
+    .summary { font-size: 11.5pt; color: var(--text-main); text-align: justify; text-align-last: center; line-height: 1.75; margin: 0 auto; font-weight: 400; }
+    
+    /* Ana Izgara Yapısı */
+    .main-content {
+        max-width: 1140px;
+        margin: 40px auto;
+        padding: 0 24px;
+        display: grid;
+        grid-template-columns: 2.1fr 1fr;
+        gap: 35px;
+    }
+    
+    section { 
+        background: var(--bg-card); 
+        padding: 35px; 
+        border-radius: 16px; 
+        border: 1px solid var(--border-color); 
+        margin-bottom: 30px; 
+        box-shadow: 0 10px 30px -15px rgba(0,0,0,0.03);
+    }
+    
+    h2 { 
+        font-size: 11.5pt; 
+        color: var(--text-dark); 
+        border-bottom: 2px solid var(--brand-blue); 
+        padding-bottom: 10px; 
+        margin-top: 0; 
+        margin-bottom: 24px; 
+        text-transform: uppercase; 
+        letter-spacing: 1px;
+        font-weight: 800;
+    }
+    
+    /* Dinamik Akordiyon Elemanları */
+    .accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+    }
+    .accordion-header h2 { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+    
+    .accordion-toggle-indicator {
+        font-size: 10pt;
+        color: var(--brand-blue);
+        font-weight: 800;
+        background: var(--brand-light);
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .accordion-toggle-indicator::after { content: "＋"; }
+    
+    .accordion-content { 
+        max-height: 0; 
+        overflow: hidden; 
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        padding-top: 0; 
+    }
+    
+    .accordion-section.open .accordion-content {
+        max-height: 2500px;
+        padding-top: 24px;
+        border-top: 2px solid var(--brand-blue);
+        margin-top: 16px;
+    }
+    .accordion-section.open .accordion-toggle-indicator { 
+        transform: rotate(180deg);
+        background: var(--brand-blue);
+        color: white;
+    }
+    .accordion-section.open .accordion-toggle-indicator::after { content: "✕"; }
+    
+    /* Deneyim Listesi */
+    .exp-item { margin-bottom: 30px; padding-bottom: 24px; border-bottom: 1px dashed var(--border-color); }
+    .exp-item:last-child { border: none; margin-bottom: 0; padding-bottom: 0; }
+    .exp-header { display: flex; justify-content: space-between; font-weight: 700; color: var(--text-dark); font-size: 11pt; }
+    .exp-subheader { font-weight: 600; color: var(--brand-accent); font-size: 9.5pt; margin-top: 4px; margin-bottom: 12px; }
+    
+    ul { padding-left: 18px; margin: 8px 0 0 0; }
+    li { margin-bottom: 8px; font-size: 9.5pt; text-align: justify; color: var(--text-main); }
+    
+    /* Proje Kartları */
+    .project-card {
+        background: linear-gradient(180deg, #ffffff 0%, var(--brand-light) 100%);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px -15px rgba(30, 58, 138, 0.08);
+        border-color: #cbd5e1;
+    }
+    .project-title { font-weight: 800; color: var(--text-dark); font-size: 11.5pt; display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;}
+    .project-title span:last-child { white-space: nowrap; flex-shrink: 0; text-align: right; }
+    .project-tech { font-weight: 600; color: var(--brand-blue); font-size: 8.5pt; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .project-desc { font-size: 9.5pt; text-align: justify; margin: 10px 0 0 0; color: var(--text-main); line-height: 1.6; }
+    
+    .project-footer { display: flex; justify-content: flex-end; margin-top: 14px; border-top: 1px solid rgba(0,0,0,0.04); padding-top: 12px; }
+    .project-link { font-size: 8.5pt; font-weight: 700; color: var(--brand-accent); text-decoration: none; transition: color 0.2s; }
+    .project-link:hover { color: var(--brand-blue); text-decoration: underline; }
+    
+    .pub-item { font-size: 9.5pt; margin-bottom: 14px; text-align: justify; padding-left: 12px; border-left: 3px solid var(--brand-accent); line-height: 1.5; }
+    .pub-item:last-child { margin-bottom: 0; }
+
+    /* Yetenek Rozetleri */
+    .skill-category { margin-bottom: 24px; }
+    .skill-category:last-child { margin-bottom: 0; }
+    .skill-cat-title { font-size: 8.5pt; font-weight: 800; color: var(--text-dark); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+    
+    .skill-badge {
+        display: inline-block;
+        background: #ffffff;
+        color: var(--text-dark);
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 8.5pt;
+        font-weight: 600;
+        margin: 4px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+    .badge-highlight {
+        background: #eff6ff;
+        color: var(--brand-blue);
+        border-color: #bfdbfe;
+    }
+    
+    .contact-info { display: flex; align-items: center; font-size: 9.5pt; margin-bottom: 14px; }
+    .contact-info a { color: var(--text-dark); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+    .contact-info a:hover { color: var(--brand-accent); }
+    
+    .contact-icon { stroke: var(--brand-blue); margin-right: 12px; transition: stroke 0.2s; flex-shrink: 0; }
+    .contact-info:hover .contact-icon { stroke: var(--brand-accent); }
+
+    /* ==========================================================================
+       MOBİL VE TABLET UYUMLULUK KATMANI (RESPONSIVE)
+       ========================================================================== */
+    @media (max-width: 912px) {
+        .main-content { 
+            grid-template-columns: 1fr; 
+            gap: 25px; 
+            margin: 25px auto;
+        }
+
+        .main-content > div {
+            display: contents;
+        }
+
+        #contact { order: 1; } 
+        #projects { order: 2; } 
+        #education { order: 3; } 
+        #skills { order: 4; }
+        #experience { order: 5; }
+        #publications { order: 6; }
+    }
+
+    @media (max-width: 728px) {
+        body {
+            background-size: 20px 20px;
+        }
+        
+        .nav-container {
+            flex-direction: column;
+            gap: 10px;
+            text-align: center;
+            padding: 0 16px;
+        }
+        
+        .hero {
+            padding: 60px 16px 40px 16px;
+        }
+        
+        h1 {
+            font-size: 24pt;
+        }
+        
+        .subtitle {
+            font-size: 11pt;
+            letter-spacing: 1px;
+        }
+        
+        .summary {
+            font-size: 10.5pt;
+            text-align: justify;
+            text-align-last: initial;
+        }
+        
+        .main-content {
+            padding: 0 16px;
+        }
+        
+        section {
+            padding: 24px 20px;
+            border-radius: 12px;
+            margin-bottom: 0;
+        }
+        
+        .project-title {
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .project-title span:last-child {
+            align-self: flex-start;
+            font-size: 9.5pt;
+        }
+        
+        .exp-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+        }
+        
+        .skill-badge {
+            padding: 5px 10px;
+            font-size: 8pt;
+        }
+    }
+</style>
+</head>
+<body>
+
+    <!-- NAVIGASYON -->
+    <div class="navbar">
+        <div class="nav-container">
+            <div class="logo">Emre Avşar - Kontrol ve Yazılım Mühendisi</div>
+            <div class="nav-status">Geliştirici Paneli</div>
+        </div>
+    </div>
+
+    <!-- BAŞLIK & ÖZET -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>EMRE AVŞAR</h1>
+            <div class="subtitle">Kontrol Sistemleri ve Algoritma Tasarım Mühendisi</div>
+            <div class="summary">
+                Kontrol sistemleri tasarımı, yüksek doğruluklu dinamik modelleme ve emniyet-kritik sistem yazılımları üzerine odaklanan kontrol ve otomasyon yüksek mühendisiyim. Togg bünyesinde, Araç Kontrol Üniteleri (VCU) için kritik kontrol algoritmalarının Model Tabanlı Tasarım (MBD) süreçlerini yürütmekte ve AUTOSAR entegrasyon süreçlerini uçtan uca V-Modeli metodolojisiyle yönetmekteyim. İstanbul Teknik Üniversitesi'ndeki doktora araştırmalarımda ise dinamik ve belirsiz ortamlarda sistem güvenilirliğini en üst düzeye çıkarmak adına Kontrol Bariyer Fonksiyonları (CBF) ve gürbüz (robust) kontrol teorisi üzerine yoğunlaşmaktayım.
+            </div>
+        </div>
+    </div>
+
+    <!-- ANA İÇERİK -->
+    <div class="main-content">
+        
+        <!-- SOL SÜTUN: PROJELER VE DENEYİMLER -->
+        <div>
+            <!-- MÜHENDİSLİK PROJELERİ -->
+            <section id="projects">
+                <h2>Öne Çıkan Mühendislik Projeleri</h2>
+                
+                <div class="project-card">
+                    <div class="project-title">
+                        <span>Oyun Teorisi ve CBF Destekli Gelişmiş Otonom Sürüş Simülatörü</span>
+                        <span style="font-weight:normal; color: var(--brand-accent);" class="italic">Karar Mekanizmaları & Güvenlik</span>
+                    </div>
+                    <div class="project-tech">Python, numpy, cvxpy (OSQP Solver), Oyun Teorisi (Expected Utility), Kontrol Bariyer Fonksiyonları (CBF), Kinematik Bisiklet Modeli</div>
+                    <p class="project-desc">Açıklanabilir yapay zeka (Explainable AI) ve deterministik kurallarla çalışan, Sense-Plan-Act mimarisine dayalı modüler bir otoban sollama simülatörü geliştirilmiştir. Araç şerit değişim kararlarında diğer sürücülerin niyetlerini Oyun Teorisi ile analiz ederken, takip süreçlerinde ACC (Intelligent Driver Model) ve pürüzsüz geçişlerde Virtual Rabbit yörünge üreteci kullanır. Karar katmanındaki olası mantık hatalarını sönümlemek amacıyla alt katmana Control Barrier Functions (CBF) ve cvxpy tabanlı optimizasyon kalkanı entegre edilerek kaza riski matematiksel olarak sıfırlanmıştır. Bellek yönetimini optimize etmek adına özel bir Garbage Collector kurgulanmıştır.</p>
+                    <div class="project-footer">
+                        <a href="https://github.com/emreavsar94/game-theoretic-cbf-autopilot" target="_blank" class="project-link">Kaynak Kodları İncele →</a>
+                    </div>
+                </div>
+
+                <!-- Proje 1: Kalman Filtresi -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <span>Kalman Filtresi ile 2D Radar Hedef Takibi Simülasyonu</span>
+                        <span style="font-weight:normal; color: var(--brand-accent);" class="italic">Sinyal İşleme & Kestirim</span>
+                    </div>
+                    <div class="project-tech">MATLAB, Simulink, Model Tabanlı Tasarım (MBD), Ayrık-Zaman Durum-Uzay Modeli</div>
+                    <p class="project-desc">MATLAB/Simulink ortamında model tabanlı tasarım prensiplerine uygun olarak 2D radar hedef takip simülasyonu kurgulanmıştır. Ayrık-zaman durum-uzay (Discrete-Time State-Space) modelinde, yüksek manevralı senaryolardaki filtre gecikmesini (lag) minimize etmek amacıyla durum vektöründe anlık ivmeyi de tahmin eden 6 boyutlu Sabit İvmeli (CA) Kalman Filtresi tasarımı yapılmış ve Gaussian sensör gürültüleri başarıyla filtrelenmiştir.</p>
+                    <div class="project-footer">
+                        <a href="https://github.com/emreavsar94/radar-target-tracking-kalman" target="_blank" class="project-link">Kaynak Kodları İncele →</a>
+                    </div>
+                </div>
+
+                <!-- Project 2: Combined Grid Yapı Evolution -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <span>Grid Yapı Web Sitesi ve İnteraktif Teklif Modülü</span>
+                        <span style="font-weight:normal; color: var(--brand-accent);" class="italic">Web Mimarisi</span>
+                    </div>
+                    <div class="project-tech">Next.js 14, React, Tailwind CSS, HTML5 Canvas, Vanilla JS, Cloudflare Pages</div>
+                    <p class="project-desc">Hafif çelik yapıların statik tasarım ve teklif süreçlerini optimize eden kurumsal web altyapısı geliştirilmiştir. İlk sürümdeki statik HTML/JS yapısı, SSR ve SSG avantajlarından yararlanmak adına Next.js mimarisine (App Router) taşınmıştır. Kullanıcıların tarayıcı üzerinde kat planı çizerek anlık maliyet hesabı alabildiği HTML5 Canvas tabanlı interaktif bir modül sisteme entegre edilmiştir.</p>
+                    <div class="project-footer">
+                        <a href="https://www.gridyapi.com" target="_blank" class="project-link">Canlı Proje Demosu →</a>
+                    </div>
+                </div>
+
+                <!-- Proje 3: Yüksek Lisans Tezi -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <span>Arızaya Toleranslı Çoklu Robot Hedefleme Kontrol Kanunları</span>
+                        <span style="font-weight:normal; color: #64748b;" class="italic">Yüksek Lisans Tezi</span>
+                    </div>
+                    <div class="project-tech">Kontrol Teorisi, Çoklu Mobil Robot Sistemleri, MATLAB Benzetim Çalışması</div>
+                    <p class="project-desc">İstanbul Teknik Üniversitesi bünyesindeki yüksek lisans tezi kapsamında, bilinmeyen ortamlarda görev yapan çoklu mobil robot ağları için otonom rota planlama algoritmaları geliştirilmiştir. Sistem bileşenlerinde oluşabilecek anlık donanım arızalarına karşı ağ kararlılığını ve hedef takibini sürdürebilen gürbüz (robust) ve arızaya toleranslı adaptif kontrol kanunları tasarlanmıştır.</p>
+                    <div class="project-footer">
+                        <span class="italic" style="font-size: 8.5pt; color: #64748b;">Akademik Proje</span>
+                    </div>
+                </div>
+
+                <!-- Proje 4: Giyilebilir Robot Kol -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <span>Giyilebilir Yardımcı Robot Kol Tasarımı</span>
+                        <span style="font-weight:normal; color: #64748b;" class="italic">Mekatronik Sistem Tasarımı</span>
+                    </div>
+                    <div class="project-tech">Kinematik Modelleme, Dinamik Simülasyonlar, Ses Komut Tasarımı</div>
+                    <p class="project-desc">Mekatronik sistem tasarımı çalışmaları kapsamında, sırta giyilebilir (exoskeleton) yardımcı bir robotik kol manipülatörünün kinematik ve dinamik modellemesi gerçekleştirilmiştir. Belirlenen tasarım kriterleri doğrultusunda, ses komutlarıyla senkronize çalışan yörünge takip kontrolcüleri sanal test ortamlarında simüle edilmiştir.</p>
+                    <div class="project-footer">
+                        <span class="italic" style="font-size: 8.5pt; color: #64748b;">Akademik Proje</span>
+                    </div>
+                </div>
+
+                <!-- Proje 5: Lisans Bitirme Projesi -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <span>Mobil Robotlarda Engelden Kaçınma Algoritmaları ve Optimal Rota Planlaması</span>
+                        <span style="font-weight:normal; color: #64748b;" class="italic">Lisans Bitirme Çalışması</span>
+                    </div>
+                    <div class="project-tech">MATLAB, Görüntü İşleme, Arduino</div>
+                    <p class="project-desc">Yıldız Teknik Üniversitesi bitirme çalışması kapsamında, mobil robotların engelli ortamlarda en kısa ve optimal rotayı bulmasını sağlayan Simulink tabanlı rota planlama algoritmaları geliştirilmiştir. Projenin donanım aşamasında, tavan kamerası üzerinden alınan anlık görüntü işleme verileriyle Arduino tabanlı gerçek zamanlı yörünge takip döngüsü doğrulanmıştır.</p>
+                    <div class="project-footer">
+                        <span class="italic" style="font-size: 8.5pt; color: #64748b;">Akademik Proje</span>
+                    </div>
+                </div>
+
+                <!-- Proje 6: Tehdit Takibi -->
+                <div class="project-card">
+                    <div class="project-title">
+                        <span>Güvenlik Uygulamalarında Hareketli Tehditlerin Dinamik Takibi</span>
+                        <span style="font-weight:normal; color: #64748b;" class="italic">Lisans Tasarım Projesi</span>
+                    </div>
+                    <div class="project-tech">C++, OpenCV, Mikrodenetleyiciler, Servo Mekanizmalar</div>
+                    <p class="project-desc">Lisans tasarım projesi kapsamında, C++ ve OpenCV kütüphanesi kullanılarak gerçek zamanlı yüz algılama ve hareketli hedef takip sistemi geliştirilmiştir. Kamera görüntüsünden hesaplanan anlık hedef koordinatları mikrodenetleyici mimarisine aktarılarak, iki eksenli servo pan-tilt mekanizmasının gürbüz şekilde hedefe kilitlenmesi sağlanmıştır.</p>
+                    <div class="project-footer">
+                        <span class="italic" style="font-size: 8.5pt; color: #64748b;">Akademik Proje</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- İŞ DENEYİMİ -->
+            <section id="experience" class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('experience')">
+                    <h2>Profesyonel İş Deneyimi</h2>
+                    <span class="accordion-toggle-indicator"></span>
+                </div>
+                
+                <div class="accordion-content">
+                    <div class="exp-item">
+                        <div class="exp-header">
+                            <span>TOGG</span>
+                            <span style="color: var(--brand-accent);">10.2022 – Günümüz</span>
+                        </div>
+                        <div class="exp-subheader">Kontrol Sistemleri ve Araç Yazılım Mühendisi</div>
+                        <ul>
+                            <li><b>Model Tabanlı Tasarım (MBD):</b> Karmaşık kontrol sistemlerinin MATLAB & Simulink ile modellenmesi ve simülasyonu süreçlerini yürüttüm.</li>
+                            <li><b>AUTOSAR Yazılım Geliştirme:</b> Sistem gereksinimlerini temel alarak AUTOSAR kontrol sistemleri için Uygulama Yazılımı (ASW) bileşenlerini tasarladım ve hayata geçirdim.</li>
+                            <li><b>VCU Fonksiyon ve Algoritma Tasarımı:</b> Menzil Tahmini (Range Estimation), LV Yönetimi ve Vites Geçiş Mantığı gibi kritik Araç Kontrol Ünitesi (VCU) fonksiyonlarının uçtan uca algoritma tasarımını, fonksiyon geliştirmesini ve kalibrasyonunu üstlendim.</li>
+                            <li><b>Gelişmiş Scripting ve Veri Analizi:</b> Model optimizasyonu ve veri işleme (post-processing) süreçlerinde scripting yetkinliğimi kullanarak sistem performansını artırdım; ETAS (INCA), Vector (CANape, CANoe), MDA ve Concerto araçlarıyla kapsamlı analizler gerçekleştirdim.</li>
+                            <li><b>V-Modeli (V-Cycle) Süreç Yönetimi:</b> Gereksinim yönetiminden araç üstü doğrulamaya kadar V-Modeli kapsamındaki tüm birim düzeyindeki faaliyetlerde ve sistem entegrasyonunda aktif rol aldım.</li>
+                            <li><b>Proje Liderliği:</b> Üst düzey sistem entegrasyonu ve özellik geliştirme süreçlerine odaklanarak bir otonom sürüş projesine liderlik ettim.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-header">
+                            <span>ALTINAY ROBOT TEKNOLOJİLERİ</span>
+                            <span style="color: var(--brand-accent);">09.2021 – 09.2022</span>
+                        </div>
+                        <div class="exp-subheader">Hareket Kontrolü ve Robotik Otomasyon Mühendisi</div>
+                        <ul>
+                            <li><b>İleri Seviye Hareket Kontrolü:</b> Endüstriyel PC tabanlı sistemlerde, EtherCAT haberleşme protokolü kullanarak çok eksenli ve gerçek zamanlı hareket kontrol mimarilerini kurguladım ve devreye aldım.</li>
+                            <li><b>Ar-Ge ve Algoritma Geliştirme:</b> Bir TÜBİTAK projesi kapsamında, kontrol algoritmalarının matematiksel modellerini oluşturdum, simülasyonlarını gerçekleştirdim ve fiziksel sistem üzerinde performans testlerini yürüttüm.</li>
+                            <li><b>PLC ve Endüstriyel Yazılım:</b> Karmaşık endüstriyel süreçler için PLC programlama (Structured Text/FBD) süreçlerini yönettim; sistem performansını ve kullanım kolaylığını optimize eden HMI/UI arayüzleri geliştirdim.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-header">
+                            <span>ERKEN KARİYER & ENDÜSTRİYEL STAJLAR</span>
+                            <span style="color: var(--brand-accent);">2015 – 2017</span>
+                        </div>
+                        <ul>
+                            <li><b>Dal Electric and Automation Systems (2017):</b> Endüstriyel PLC lojik tasarım yapıları ve SCADA telemetri saha kurulum süreçlerinde mühendislik stajı icra edilmiştir.</li>
+                            <li><b>KABMAK Mühendislik ve Makina (2016):</b> Ağır sanayi makina otomasyonlarında donanım uyumluluğu, pano montaj düzeni ve endüstriyel sensör konfigürasyonları üzerine saha stajı tamamlanmıştır.</li>
+                            <li><b>Kognitron Bilgi Teknolojileri (2015):</b> Gömülü sistem yazılım temellerini incelemek amacıyla C++ mimarileri ve temel veri yapıları üzerine teknik staj yürütülmüştür.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- YAYINLAR -->
+            <section id="publications" class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion('publications')">
+                    <h2>Akademik Yayınlar ve Bildiriler</h2>
+                    <span class="accordion-toggle-indicator"></span>
+                </div>
+                
+                <div class="accordion-content">
+                    <div class="pub-item">
+                        <b>E. Avşar</b>, F. Çalışkan, "Bilinmeyen Ortamda Çoklu Robotlarla Arızaya Toleranslı Hedefe Ulaşma," <i>22. Otomatik Kontrol Türk Millî Komitesi Ulusal Toplantısı (TOK)</i>, 2021.
+                    </div>
+                    <div class="pub-item">
+                        <b>E. Avşar</b>, F. Çalışkan, "Comparison of Algorithms for Targeting with Multiple Robots in Unknown Environment," <i>International Symposium on Automotive Science and Technology (ISASTECH)</i>, 2021.
+                    </div>
+                    <div class="pub-item">
+                        C. Zoroğlu, <b>E. Avşar</b>, F. Oynak, B. Erol, A. Delibaşı, "Mobil Robotlarda Engelden Kaçınma Algoritmaları ve Optimal Rota Planlaması," <i>19. Otomatik Kontrol Türk Millî Komitesi Ulusal Toplantısı (TOK)</i>, 2017.
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- SAĞ SÜTUN: İLETİŞİM, EĞİTİM VE YETENEKLER -->
+        <div>
+            <!-- İLETİŞİM -->
+            <section id="contact">
+                <h2>İletişim & Bağlantılar</h2>
+                
+                <div class="contact-info">
+                    <!-- Email İkonu -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <a href="mailto:avsaremre94@gmail.com">avsaremre94@gmail.com</a>
+                </div>
+                
+                <div class="contact-info">
+                    <!-- LinkedIn İkonu -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                    <a href="https://www.linkedin.com/in/eavsar" target="_blank">linkedin.com/in/eavsar</a>
+                </div>
+                
+                <div class="contact-info">
+                    <!-- GitHub İkonu -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    <a href="https://github.com/emreavsar94" target="_blank">github.com/emreavsar94</a>
+                </div>
+                
+                <div class="contact-info">
+                    <!-- Doküman/İndirme İkonu -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <a href="EmreAVSAR_Resume.pdf" download="Emre_Avsar_CV.pdf" style="color: var(--brand-blue); font-weight: 700;">Executive Resume (PDF / EN)</a>
+                </div>
+            </section>
+
+            <!-- EĞİTİM -->
+            <section id="education">
+                <h2>Eğitim Geçmişi</h2>
+                <div class="item" style="margin-bottom: 16px;">
+                    <div class="bold" style="font-size: 10pt;">Kontrol ve Otomasyon Müh. (Doktora - Ph.D.)</div>
+                    <div class="italic" style="font-size: 9pt;">İstanbul Teknik Üniversitesi</div>
+                    <div style="font-size: 8.5pt; color: var(--brand-accent); font-weight: 600; margin-top: 2px;">2026 – Günümüz</div>
+                    <div style="font-size: 8.5pt; color: var(--text-main); margin-top: 4px; line-height: 1.3;">Araştırma: Kontrol Bariyer Fonksiyonları (CBF), Gürbüz Kontrol, Karar Mekanizmaları.</div>
+                </div>
+                <div class="item" style="margin-bottom: 16px;">
+                    <div class="bold" style="font-size: 10pt;">Mekatronik Mühendisliği (Yüksek Lisans - M.Sc.)</div>
+                    <div class="italic" style="font-size: 9pt;">İstanbul Teknik Üniversitesi</div>
+                    <div style="font-size: 8.5pt; color: var(--brand-accent); font-weight: 600; margin-top: 2px;">2017 – 2021 | GANO: 3.13</div>
+                    <div style="font-size: 8.5pt; color: var(--text-main); margin-top: 4px; line-height: 1.3;">Tez Konusu: Bilinmeyen Ortamda Çoklu Robotlarla Arızaya Toleranslı Hedefe Ulaşma.</div>
+                </div>
+                <div class="item">
+                    <div class="bold" style="font-size: 10pt;">Kontrol ve Otomasyon Müh. (Lisans - B.Sc.)</div>
+                    <div class="italic" style="font-size: 9pt;">Yıldız Teknik Üniversitesi</div>
+                    <div style="font-size: 8.5pt; color: var(--brand-accent); font-weight: 600; margin-top: 2px;">2012 – 2017 | GANO: 3.05</div>
+                </div>
+                <div class="item" style="margin-top: 16px;">
+                    <div class="bold" style="font-size: 10pt;">Beşiktaş Atatürk Anadolu Lisesi (Sayısal)</div>
+                    <div style="font-size: 8.5pt; color: var(--text-main); font-weight: 500; margin-top: 2px;">2008 – 2012</div>
+                </div>
+            </section>
+
+            <!-- YETENEKLER -->
+            <section id="skills">
+                <h2>Uzmanlık & Teknolojiler</h2>
+                
+                <div class="skill-category">
+                    <div class="skill-cat-title" style="color: var(--brand-blue);">Öne Çıkan Mühendislik Yetenekleri</div>
+                    <div class="skill-badge badge-highlight">Algoritma Tasarımı</div>
+                    <div class="skill-badge badge-highlight">MATLAB / Simulink</div>
+                    <div class="skill-badge badge-highlight">Sistem Dinamiği ve Kontrol</div>
+                    <div class="skill-badge badge-highlight">Modelleme ve Simülasyon</div>
+                </div>
+
+                <div class="skill-category">
+                    <div class="skill-cat-title">Teorik Altyapı</div>
+                    <div class="skill-badge badge-highlight">Model Tabanlı Tasarım (MBD)</div>
+                    <div class="skill-badge">Durum Kestirimi & Filtreleme</div>
+                    <div class="skill-badge">Sensör Füzyonu</div>
+                    <div class="skill-badge">Kontrol Bariyer Fonksiyonları (CBF)</div>
+                </div>
+                
+                <div class="skill-category">
+                    <div class="skill-cat-title">Mühendislik Araçları</div>
+                    <div class="skill-badge">Stateflow</div>
+                    <div class="skill-badge">AUTOSAR</div>
+                    <div class="skill-badge">ETAS INCA</div>
+                    <div class="skill-badge">Vector CANape / CANoe</div>
+                    <div class="skill-badge">MIL / SIL / HIL Testleri</div>
+                </div>
+
+                <div class="skill-category">
+                    <div class="skill-cat-title">Programlama Dilleri & Web Teknolojileri</div>
+                    <div class="skill-badge badge-highlight">C / C++</div>
+                    <div class="skill-badge badge-highlight">Python</div>
+                    <div class="skill-badge">C#</div>
+                    <div class="skill-badge">Structured Text (PLC)</div>
+                    <div class="skill-badge">Next.js / React</div>
+                    <div class="skill-badge">Tailwind CSS</div>
+                </div>
+            </section>
+        </div>
+        
+    </div>
+
+    <!-- NATIVE TOGGLE INTERACTIVE SCRIPT -->
+    <script>
+        function toggleAccordion(id) {
+            const section = document.getElementById(id);
+            section.classList.toggle('open');
+        }
+    </script>
+
+</body>
+</html>
